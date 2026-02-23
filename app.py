@@ -87,7 +87,7 @@ if submit:
 
             # Informações institucionais (discretas)
             draw.text((210, y_pos), "ArcelorMittal Brasil | www.arcelormittal.com.br", font=font_small, fill="#777777")
-            draw.text((210, y_pos + 18), "Av. Carandá, 1115 - 24° andar", font=font_small, fill="#777777")
+            draw.text((210, y_pos + 18), "Av. Carandá, 1115", font=font_small, fill="#777777")
             draw.text((210, y_pos + 36), "Funcionários - MG | CEP 30130-915", font=font_small, fill="#777777")
 
             # Preview
