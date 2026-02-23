@@ -1,9 +1,7 @@
-#python -m streamlit run app.py
-
-# app.py
 import streamlit as st
 from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
+from pathlib import Path
 
 # Configuração da página
 st.set_page_config(page_title="Gerador de Assinatura ArcelorMittal", layout="centered")
@@ -12,8 +10,13 @@ st.set_page_config(page_title="Gerador de Assinatura ArcelorMittal", layout="cen
 ORANGE = "#F47D30"
 WHITE = "#FFFFFF"
 
-# Caminho da logo local
-LOGO_PATH = "./img/logo.png"
+# Caminho base
+BASE_DIR = Path(__file__).resolve().parent
+
+# Caminhos da logo e das fontes
+LOGO_PATH = BASE_DIR / "img" / "logo.png"
+FONT_REG = BASE_DIR / "fonts" / "DejaVuSans.ttf"
+FONT_BOLD = BASE_DIR / "fonts" / "DejaVuSans-Bold.ttf"
 
 # Título
 st.markdown(
@@ -38,11 +41,9 @@ if submit:
         st.error("Você deve preencher o telefone/ramal ou marcar a opção de não informar.")
     else:
         try:
-            # Altura dinâmica
             altura = 240 if telefone else 220
 
-            # Fundo branco (mais profissional)
-            img = Image.new("RGB", (720, altura), "#FFFFFF")
+            img = Image.new("RGB", (720, altura), WHITE)
             draw = ImageDraw.Draw(img)
 
             # Barra lateral laranja
@@ -53,39 +54,26 @@ if submit:
             img.paste(logo, (30, 25), logo)
 
             # Fontes
-            try:
-                font_nome = ImageFont.truetype("arialbd.ttf", 30)
-                font_cargo = ImageFont.truetype("arial.ttf", 20)
-                font_texto = ImageFont.truetype("arial.ttf", 18)
-                font_small = ImageFont.truetype("arial.ttf", 15)
-            except:
-                font_nome = ImageFont.load_default()
-                font_cargo = ImageFont.load_default()
-                font_texto = ImageFont.load_default()
-                font_small = ImageFont.load_default()
+            font_nome = ImageFont.truetype(str(FONT_BOLD), 30)
+            font_cargo = ImageFont.truetype(str(FONT_REG), 20)
+            font_texto = ImageFont.truetype(str(FONT_REG), 18)
+            font_small = ImageFont.truetype(str(FONT_REG), 15)
 
-            # Nome (mais destaque)
+            # Texto
             draw.text((210, 30), nome, font=font_nome, fill="#1C1C1C")
-
-            # Cargo (mais discreto)
             draw.text((210, 70), cargo, font=font_cargo, fill="#666666")
-
-            # Linha divisória elegante
             draw.line([(210, 100), (690, 100)], fill="#DDDDDD", width=2)
 
-            # Email
-            draw.text((210, 115), f"{email}", font=font_texto, fill="#333333")
+            draw.text((210, 115), email, font=font_texto, fill="#333333")
 
             y_pos = 140
 
-            # Telefone
             if telefone:
-                draw.text((210, y_pos), f"{telefone}", font=font_texto, fill="#333333")
+                draw.text((210, y_pos), telefone, font=font_texto, fill="#333333")
                 y_pos += 25
 
             y_pos += 10
 
-            # Informações institucionais (discretas)
             draw.text((210, y_pos), "ArcelorMittal Brasil | www.arcelormittal.com.br", font=font_small, fill="#777777")
             draw.text((210, y_pos + 18), "Av. Carandá, 1115", font=font_small, fill="#777777")
             draw.text((210, y_pos + 36), "Funcionários - MG | CEP 30130-915", font=font_small, fill="#777777")
