@@ -31,6 +31,10 @@ with st.form("assinatura_form"):
     cargo = st.text_input("Cargo*", "")
     telefone = st.text_input("Telefone/Ramal")
     sem_telefone = st.checkbox("Não quero informar telefone/ramal")
+
+    num_andar = st.text_input("Digite o andar em que voce está: ")
+    sem_num_andar= st.checkbox("Não quero informar o andar")
+
     submit = st.form_submit_button("Gerar Assinatura")
 
 # Geração da assinatura
@@ -39,9 +43,11 @@ if submit:
         st.error("Por favor, preencha todos os campos obrigatórios (*).")
     elif not telefone and not sem_telefone:
         st.error("Você deve preencher o telefone/ramal ou marcar a opção de não informar.")
+    elif not num_andar and not sem_num_andar:
+        st.error("Por favor, digite o número do andar ou marque a opção de não informar") 
     else:
         try:
-            altura = 240 if telefone else 220
+            altura = 260 if telefone and num_andar else 230 
 
             img = Image.new("RGB", (720, altura), WHITE)
             draw = ImageDraw.Draw(img)
@@ -75,7 +81,7 @@ if submit:
             y_pos += 10
 
             draw.text((210, y_pos), "ArcelorMittal Brasil | www.arcelormittal.com.br", font=font_small, fill="#777777")
-            draw.text((210, y_pos + 18), "Av. Carandá, 1115", font=font_small, fill="#777777")
+            draw.text((210, y_pos + 18), "Av. Carandá, 1115 - {num_andar}° andar", font=font_small, fill="#777777")
             draw.text((210, y_pos + 36), "Funcionários - MG | CEP 30130-915", font=font_small, fill="#777777")
 
             # Preview
